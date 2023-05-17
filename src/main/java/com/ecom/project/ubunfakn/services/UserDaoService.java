@@ -1,5 +1,8 @@
 package com.ecom.project.ubunfakn.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +39,17 @@ public class UserDaoService {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public List<User> getAllUser()
+    {
+        List<User> users=new ArrayList<>();
+        try{
+            users = this.userDao.findAll();
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return users;
     }
 }

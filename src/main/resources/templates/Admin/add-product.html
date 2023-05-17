@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="Admin/base copy
+    ::
+    Layout(~{::section})">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <section>
+            <div class="container mt-5 mb-2">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="card bg-secondary text-white">
+                            <div
+                                th:if="${session.msg}"
+                                class="container mt-4">
+                                <div
+                                    class="text-center"
+                                    th:classappend="${'alert
+                                    alert-'+session.msg.type}"
+                                    role="alert">
+                                    <span
+                                        th:text="${session.msg.content}">
+                                    </span>
+                                    <th:block
+                                        th:text="${@sessionHelper.removeAttributeFromSession()}"></th:block>
+                                </div>
+                            </div>
+                            <div class="card-title mt-3">
+                                <h1 class="text-center">Add Product</h1>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{submit-pro}" method="post"
+                                    enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="name">Product Name</label>
+                                        <input type="text" class="form-control"
+                                            id="name"
+                                            name="name"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Enter Product Name"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Product
+                                            Description</label>
+                                        <input type="text" class="form-control"
+                                            id="description"
+                                            name="description"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Enter Product Description"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category">Choose a category:</label>
+                                        <select id="category" required
+                                            name="categories.name">
+                                            <option th:each="item
+                                                : ${categories}"
+                                                th:text="${item.name}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="brand">Product Brand</label>
+                                        <input type="text" class="form-control"
+                                            id="brand"
+                                            name="brand"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Enter Product Brand"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Product Price</label>
+                                        <input type="text" class="form-control"
+                                            id="price"
+                                            name="price"
+                                            aria-describedby="emailHelp"
+                                            placeholder="Enter Product Price"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="image">Product Image</label>
+                                        <input type="file" class="form-control"
+                                            id="image"
+                                            name="pro-image">
+                                    </div>
+                                    <button type="submit" class="btn
+                                        btn-primary mt-4 btn-block">Add</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

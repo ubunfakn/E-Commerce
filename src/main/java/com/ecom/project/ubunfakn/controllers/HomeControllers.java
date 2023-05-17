@@ -30,6 +30,9 @@ public class HomeControllers {
     ProductDaoService productDaoService;
 
     @Autowired
+    CategoriesDaoService categoriesDaoService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
@@ -163,7 +166,9 @@ public class HomeControllers {
     public String mobiles(Model model)
     {
         model.addAttribute("title", "Mobiles");
-        List<Product> mobiles=this.productDaoService.getByCat("Mobile");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Mobile");
+        List<Product> mobiles=this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", mobiles);
         return "products/Products";
     }
@@ -172,8 +177,11 @@ public class HomeControllers {
     public String beauty(Model model)
     {
         model.addAttribute("title", "Beauty");
-        List<Product> beau=this.productDaoService.getByCat("Beauty");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Beauty");
+        List<Product> beau = this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", beau);
+
         return "products/Products";
     }
 
@@ -181,16 +189,22 @@ public class HomeControllers {
     public String fashion(Model model)
     {
         model.addAttribute("title", "Fashion");
-        List<Product> fash=this.productDaoService.getByCat("Fashion");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Fashion");
+        List<Product> fash=this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", fash);
+
         return "products/Products";
     }
     @GetMapping("/furniture")
     public String furniture(Model model)
     {
         model.addAttribute("title", "Furniture");
-        List<Product> furn=this.productDaoService.getByCat("Furniture");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Furniture");
+        List<Product> furn = this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", furn);
+
         return "products/Products";
     }
 
@@ -198,8 +212,11 @@ public class HomeControllers {
     public String computers(Model model)
     {
         model.addAttribute("title", "Computers");
-        List<Product> computer=this.productDaoService.getByCat("Computers");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Computers");
+        List<Product> computer = this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", computer);
+
         return "products/Products";
     }
 
@@ -207,26 +224,32 @@ public class HomeControllers {
     public String electronics(Model model)
     {
         model.addAttribute("title", "Electronics");
-        List<Product> electronic=this.productDaoService.getByCat("Electronics");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Electronics");
+        List<Product> electronic = this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", electronic);
+
         return "products/Products";
     }
 
-    @GetMapping("/toys")
-    public String toys(Model model)
-    {
-        model.addAttribute("title", "Toys");
-        List<Product> toys=this.productDaoService.getByCat("Toys");
-        model.addAttribute("product", toys);
-        return "products/Products";
-    }
+    // @GetMapping("/toys")
+    // public String toys(Model model)
+    // {
+    //     model.addAttribute("title", "Toys");
+    //     List<Product> toys=this.productDaoService.getByCat("Toys");
+    //     model.addAttribute("product", toys);
+    //     return "products/Products";
+    // }
 
     @GetMapping("/kitchen")
     public String kitchen(Model model)
     {
         model.addAttribute("title", "Kitchen");
-        List<Product> kitchen=this.productDaoService.getByCat("Kitchen");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Kitchen");
+        List<Product> kitchen = this.productDaoService.getByCatId(categories.getId());
         model.addAttribute("product", kitchen);
+
         return "products/Products";
     }
 

@@ -25,14 +25,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception
     {
         return httpSecurity.authorizeHttpRequests()
-        .requestMatchers("/admin/**").hasRole("ADMIN")
+        .requestMatchers("/user/admin/**").hasRole("ADMIN")
         .requestMatchers("/user/**").hasRole("USER")
         .requestMatchers("/**").permitAll()
         .and()
         .formLogin()
         .loginPage("/login")
         .loginProcessingUrl("/doprocess")
-        .defaultSuccessUrl("/user/home")
+        .defaultSuccessUrl("/user/")
         .and().csrf().disable().build();
 
     }

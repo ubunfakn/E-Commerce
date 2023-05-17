@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="Admin/base copy
+    ::
+    Layout(~{::section})">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <section>
+            <div class="container">
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+
+                                <div class="container">
+                                    <img class="img-fluid rounded-circle"
+                                        style="max-width: 130px;"
+                                        th:src="@{/images/icon/users-avatar.png}">
+                                </div>
+
+                                <h1 th:text="${users}"></h1>
+                                <h1 class="text-uppercase text-muted
+                                    font-weight-bold">Users</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+
+                                <div class="container">
+                                    <img class="img-fluid rounded-circle"
+                                        style="max-width: 130px;"
+                                        th:src="@{/images/icon/options.png}">
+                                </div>
+
+                                <h1 th:text="${categories}"></h1>
+                                <h1 class="text-uppercase text-muted
+                                    font-weight-bold">Categories</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+
+                                <div class="container">
+                                    <img class="img-fluid rounded-circle"
+                                        style="max-width: 130px;"
+                                        th:src="@{/images/icon/new-product.png}">
+                                </div>
+
+                                <h1 th:text="${products}"></h1>
+                                <h1 class="text-uppercase text-muted
+                                    font-weight-bold">Products</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+
+                                <div class="container">
+                                    <a th:href="@{addcat}"><img class="img-fluid
+                                            rounded-circle" style="max-width:
+                                            130px;"
+                                            th:src="@{/images/icon/menu.png}"></a>
+                                </div>
+
+                                <h1><a style="text-decoration: none;"
+                                        th:href="@{addcat}" class="text-uppercase
+                                        text-muted font-weight-bold">Add
+                                        Category</a></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body text-center">
+
+                                <div class="container">
+                                    <a th:href="@{addpro}"><img class="img-fluid
+                                            rounded-circle" style="max-width:
+                                            130px;"
+                                            th:src="@{/images/icon/add-product.png}"></a>
+                                </div>
+
+                                <h1><a style="text-decoration: none;"
+                                        th:href="@{addpro}" class="text-uppercase
+                                        text-muted font-weight-bold">Add Product</a></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

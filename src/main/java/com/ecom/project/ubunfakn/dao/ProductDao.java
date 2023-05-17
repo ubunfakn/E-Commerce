@@ -28,4 +28,9 @@ public interface ProductDao extends JpaRepository<Product,Integer> {
     @Query("select p from Product p where id=:i")
     public Product getByProductId(@Param("i")int id);
 
+    // @Query("select p from Product p where Categories_Id=:n")
+    // public List<Product> getById(@Param("n") int id);
+
+    public List<Product> findByCategories_Id(@Param("n") int id);
+
 }

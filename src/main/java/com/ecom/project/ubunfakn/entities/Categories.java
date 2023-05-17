@@ -13,10 +13,11 @@ import lombok.*;
 public class Categories {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Product> product;
 }

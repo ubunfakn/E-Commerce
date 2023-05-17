@@ -14,16 +14,19 @@ public class ProductDaoService {
     @Autowired
     ProductDao productDao;
 
-    public void saveProduct(Product product)
+    public boolean saveProduct(Product product)
     {
+        boolean f=false;
         try {
 
             this.productDao.save(product);
             System.out.println("Product saved Successfully");
+            f=true;
             
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return f;
     }
 
     public List<Product> getByCat(String category)
@@ -37,6 +40,19 @@ public class ProductDaoService {
        {
         return null;
        }
+    }
+
+    public List<Product> getByCatId(int id)
+    {
+        List<Product> products=new ArrayList<>();
+        try
+        {
+            products = this.productDao.findByCategories_Id(id);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return products;
     }
 
     public List<Product> getAll()
