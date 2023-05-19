@@ -131,4 +131,30 @@ public class ProductDaoService {
             return null;
         }
     }
+
+    public List<Product> getAllByDiscount(int p)
+    {
+        try{
+            List<Product> list=this.productDao.getAllByDiscount(p);
+            return list;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Product> getAllByExactDiscount(int p)
+    {
+        try{
+            List<Product> list=this.productDao.getAllByExactDiscount(p);
+            return list;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

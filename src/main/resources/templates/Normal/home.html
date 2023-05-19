@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base ::
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="Normal/base copy
+    ::
     Layout(~{::section})">
     <head>
         <meta charset="UTF-8">
@@ -26,15 +27,89 @@
                 </div>
             </div>
 
+            <div class="container">
+                <div
+                    th:if="${session.msg}"
+                    class="container">
+                    <div
+                        class="text-center"
+                        th:classappend="${'alert
+                        alert-'+session.msg.type}"
+                        role="alert">
+                        <span
+                            th:text="${session.msg.content}">
+                        </span>
+                        <th:block
+                            th:text="${@sessionHelper.removeAttributeFromSession()}"></th:block>
+                    </div>
+                </div>
+            </div>
             <div class="container-fluid ml-1 mt-5">
-                <h1 class="text-white bg-dark" style="padding: 3px; padding-left: 13px;">Up to 30% off</h1>
+                <h1 class="text-white bg-dark" style="padding: 3px;
+                    padding-left: 13px;">Up to 30% off</h1>
                 <div class="row mt-4 mb-4">
                     <div class="col-xl-3 mb-4" th:each="item : ${product}">
+                        <div class="card mb-1 align-items-stretch d-flex"
+                            style="max-width: 540px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="" th:src="@{'/images/' +
+                                        ${item.image}}" class="card-img"
+                                        alt="...">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column">
+                                        <p class="card-text font-weight-bold
+                                            font-italic" th:text="${item.name}"></p>
+                                        <p class="card-text"
+                                            th:text="${item.description}"></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card-footer mt-auto bg-white">
+                                <div class="d-flex flex-row
+                                    justify-content-center
+                                    mt-auto">
+                                    <h5 class="text-dark font-weight-bold
+                                        font-italic" th:text="${'₹ ' +
+                                        item.price}" style="font-size: 30px;"></h5><h5
+                                        class="ml-4 bg-danger text-white"
+                                        th:text="${item.discount} + '% off'"
+                                        style="padding: 5px;"></h5></div>
+                                <div class="d-flex flex-row
+                                    justify-content-center
+                                    mt-auto">
+                                    <a class="btn btn-block btn-success
+                                        align-self-end "
+                                        type="button" th:href="@{'/user/' +
+                                        ${item.id} + '/product/' +
+                                        ${item.name}}">Shop Now</a></div>
+                                <div class="d-flex flex-row
+                                    justify-content-center
+                                    mt-2">
+                                    <a class="btn btn-block btn-danger"
+                                        type="button"
+                                        th:href="@{'/user/' + ${item.id} +
+                                        '/cart/' + ${item.name}}"><i
+                                            class="fa-solid fa-cart-shopping "></i>
+                                        Add to Cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid ml-1 mt-5">
+                <h1 class="text-white bg-dark" style="padding: 3px;
+                    padding-left: 13px;">60% off or more</h1>
+                <div class="row mt-4 mb-4">
+                    <div class="col-xl-3 mb-4" th:each="item : ${pro}">
                         <div class="card mb-1 d-flex align-items-stretch"
                             style="max-width: 540px;">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-                                    <img src="" th:src="@{'./images/' +
+                                    <img src="" th:src="@{'/images/' +
                                         ${item.image}}" class="card-img"
                                         alt="...">
                                 </div>
@@ -70,7 +145,8 @@
                                     mt-2">
                                     <a class="btn btn-block btn-danger"
                                         type="button"
-                                        th:href="@{/login}"><i
+                                        th:href="@{'/user/' + ${item.id} +
+                                        '/cart/' + ${item.name}}"><i
                                             class="fa-solid fa-cart-shopping "></i>
                                         Add to Cart</a></div>
                             </div>
@@ -80,59 +156,8 @@
             </div>
 
             <div class="container-fluid ml-1 mt-5">
-                <h1 class="text-white bg-dark" style="padding: 3px; padding-left: 13px;">60% off or more</h1>
-                <div class="row mt-4 mb-4">
-                    <div class="col-xl-3 mb-4" th:each="item : ${pro}">
-                        <div class="card mb-1 d-flex align-items-stretch"
-                            style="max-width: 540px;">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="" th:src="@{'./images/' +
-                                        ${item.image}}" class="card-img"
-                                        alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body d-flex flex-column">
-                                        <p class="card-text font-weight-bold
-                                            font-italic" th:text="${item.name}"></p>
-                                        <p class="card-text"
-                                            th:text="${item.description}"></p>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="card-footer mt-auto bg-white">
-                                <div class="d-flex flex-row
-                                    justify-content-center
-                                    mt-auto">
-                                    <h5 class="text-dark font-weight-bold
-                                        font-italic" th:text="${'₹ ' +
-                                        item.price}" style="font-size: 30px;"></h5><h5
-                                        class="ml-4 bg-danger text-white"
-                                        th:text="${item.discount} + '% off'"
-                                        style="padding: 5px;"></h5></div>
-                                <div class="d-flex flex-row
-                                    justify-content-center
-                                    mt-auto">
-                                    <a class="btn btn-block btn-success
-                                        align-self-end "
-                                        type="button" th:href="@{${item.id} + '/product/' + ${item.name}}">Shop Now</a></div>
-                                <div class="d-flex flex-row
-                                    justify-content-center
-                                    mt-2">
-                                    <a class="btn btn-block btn-danger"
-                                        type="button"
-                                        th:href="@{/login}"><i
-                                            class="fa-solid fa-cart-shopping "></i>
-                                        Add to Cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid ml-1 mt-5">
-                <h1 class="text-white bg-dark" style="padding: 3px; padding-left: 13px;">Mobile Phones</h1>
+                <h1 class="text-white bg-dark" style="padding: 3px;
+                    padding-left: 13px;">Mobile Phones</h1>
                 <div class="row mt-4 mb-4">
                     <div class="col-xl-3 mb-4" th:each="item : ${mobile}">
                         <div class="card mb-1 d-flex align-items-stretch"
@@ -169,13 +194,14 @@
                                     <a class="btn btn-block btn-success
                                         align-self-end "
                                         type="button" th:href="@{${item.id} +
-                                        '/product/' + ${item.name}}">Buy Now</a></div>
+                                        '/product/' + ${item.name}}">Shop Now</a></div>
                                 <div class="d-flex flex-row
                                     justify-content-center
                                     mt-2">
                                     <a class="btn btn-block btn-danger"
                                         type="button"
-                                        th:href="@{/login}"><i
+                                        th:href="@{'/user/' + ${item.id} +
+                                        '/cart/' + ${item.name}}"><i
                                             class="fa-solid fa-cart-shopping "></i>
                                         Add to Cart</a></div>
                             </div>
@@ -185,7 +211,8 @@
             </div>
 
             <div class="container-fluid ml-1 mt-5">
-                <h1 class="text-white bg-dark" style="padding: 3px; padding-left: 13px;">Electronics</h1>
+                <h1 class="text-white bg-dark" style="padding: 3px;
+                    padding-left: 13px;">Electronics</h1>
                 <div class="row mt-4 mb-4">
                     <div class="col-xl-3 mb-4" th:each="item : ${elec}">
                         <div class="card mb-1 d-flex align-items-stretch"
@@ -222,13 +249,14 @@
                                     <a class="btn btn-block btn-success
                                         align-self-end "
                                         type="button" th:href="@{${item.id} +
-                                        '/product/' + ${item.name}}">Buy Now</a></div>
+                                        '/product/' + ${item.name}}">Shop Now</a></div>
                                 <div class="d-flex flex-row
                                     justify-content-center
                                     mt-2">
                                     <a class="btn btn-block btn-danger"
                                         type="button"
-                                        th:href="@{/login}"><i
+                                        th:href="@{'/user/' + ${item.id} +
+                                        '/cart/' + ${item.name}}"><i
                                             class="fa-solid fa-cart-shopping "></i>
                                         Add to Cart</a></div>
                             </div>
@@ -238,7 +266,8 @@
             </div>
 
             <div class="container-fluid ml-1 mt-5">
-                <h1 class="text-white bg-dark" style="padding: 3px; padding-left: 13px;">Computers</h1>
+                <h1 class="text-white bg-dark" style="padding: 3px;
+                    padding-left: 13px;">Computers</h1>
                 <div class="row mt-4 mb-4">
                     <div class="col-xl-3 mb-4" th:each="item : ${comp}">
                         <div class="card mb-1 d-flex align-items-stretch"
@@ -275,13 +304,14 @@
                                     <a class="btn btn-block btn-success
                                         align-self-end "
                                         type="button" th:href="@{${item.id} +
-                                        '/product/' + ${item.name}}">Buy Now</a></div>
+                                        '/product/' + ${item.name}}">Shop Now</a></div>
                                 <div class="d-flex flex-row
                                     justify-content-center
                                     mt-2">
                                     <a class="btn btn-block btn-danger"
                                         type="button"
-                                        th:href="@{/login}"><i
+                                        th:href="@{'/user/' + ${item.id} +
+                                        '/cart/' + ${item.name}}"><i
                                             class="fa-solid fa-cart-shopping "></i>
                                         Add to Cart</a></div>
                             </div>

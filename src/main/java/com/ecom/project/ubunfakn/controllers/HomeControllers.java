@@ -39,20 +39,22 @@ public class HomeControllers {
     public String home(Model model)
     {
         model.addAttribute("title", "Home");
-        List<String> cat=this.productDaoService.getAllCategory();
-        model.addAttribute("category", cat);
+        
+        List<Product> products = this.productDaoService.getAllByDiscount(30);
+        model.addAttribute("product", products.subList(0, 4));
 
-        List<String> brand=this.productDaoService.getAllBrand();
-        Collections.sort(brand);
-        model.addAttribute("brand", brand);
+        List<Product> pro = this.productDaoService.getAllByExactDiscount(60);
+        model.addAttribute("pro", pro.subList(0, 4));
 
-        List<String> name=this.productDaoService.getAllNames();
-        Collections.sort(name);
-        List<String> newList=name.subList(0, 10);
-        model.addAttribute("name", newList);
+        List<Product> mobiles = this.productDaoService.getByCat("Mobile");
+        model.addAttribute("mobile", mobiles.subList(0, 4));
 
-        List<Product> budgeList=this.productDaoService.budgetProducts();
-        model.addAttribute("budget", budgeList);
+        List<Product> elect = this.productDaoService.getByCat("Electronics");
+        model.addAttribute("elec", elect.subList(0, 4));
+
+        List<Product> comp = this.productDaoService.getByCat("Computers");
+        model.addAttribute("comp", comp.subList(0, 4));
+
         return "home";
     }
 
@@ -253,34 +255,29 @@ public class HomeControllers {
         return "products/Products";
     }
 
-    // @GetMapping("/add")
-    // @ResponseBody
-    // public String add()
-    // {
-    //     Product product=new Product();
-    //     product.setBrand("POND'S");
-    //     product.setCategory("Beauty");
-    //     product.setDescription(" Non-Oily, Mattifying Daily Face Moisturizer - With Niacinamide to Lighten Dark Spots for Glowing Skin");
-    //     product.setName("POND'S Bright Beauty SPF 15 Day Cream 50 g");
-    //     product.setPrice("209");
-    //     product.setImage("Ponds.jpg");
-    //     this.productDaoService.saveProduct(product);
-
-    //     return "successfully added";
-    // }
-
     @GetMapping("/{id}/product/{name}")
-    public String productOpen(@PathVariable("id")int id, @PathVariable("name")String name)
+    public String productOpen(@PathVariable("id")int id, @PathVariable("name")String name, Model model)
     {
         Product product=this.productDaoService.getProductByProductId(id);
-        return "fetched";
+        model.addAttribute("product", product);
+        return "products/ShopNow";
     }
 
-    @GetMapping("/cat")
+    @GetMapping("/edit")
     @ResponseBody
-    public String catAdd()
+    public String addQAndD()
     {
+        List<Product> products = this.productDaoService.getAll();
 
+        for(int i=0; i<products.size();i++)
+        {
+            int quantity=(int)((Math.random()*(200-25))+25);
+            int discount=(int)((Math.random()*(65-15))+15);
+            products.get(i).setQuantity(quantity);
+            products.get(i).setDiscount(discount);
+            this.productDaoService.saveProduct(products.get(i));
+        }
         return "done";
     }
+
 }

@@ -1,5 +1,7 @@
 package com.ecom.project.ubunfakn.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.*;
 

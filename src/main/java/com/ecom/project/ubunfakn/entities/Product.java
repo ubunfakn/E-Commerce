@@ -20,7 +20,10 @@ public class Product {
     private String category;
     private String brand;
     private String price;
+    private int quantity;
+    private int discount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Categories categories;
+
 }

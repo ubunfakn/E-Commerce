@@ -33,4 +33,10 @@ public interface ProductDao extends JpaRepository<Product,Integer> {
 
     public List<Product> findByCategories_Id(@Param("n") int id);
 
+    @Query("select p from Product p where p.discount<=:p")
+    public List<Product> getAllByDiscount(@Param("p")int p);
+
+    @Query("select p from Product p where p.discount>=:p")
+    public List<Product> getAllByExactDiscount(@Param("p")int p);
+
 }

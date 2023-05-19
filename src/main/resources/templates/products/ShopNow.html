@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base ::
+    Layout(~{::section})">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <section>
+            <div class="container-fluid">
+                <div class="row mt-5 offset-md-3">
+                    <div class="card bg-white mb-5 mt-4" style="max-width: 1000px;">
+                        <div class="row no-gutters">
+                          <div class="col-md-4 mt-4 ml-1 ">
+                            <img src="..." th:src="@{'/images/' + ${product.image}}" class="card-img mt-4" alt="...">
+                          </div>
+                          <div class="col-md-7 ml-5">
+                            <div class="card-body mt-4 ">
+                              <h3 class="card-text" th:text="${product.name}"></h3>
+                              <h3 class="card-text" th:text="${product.description}"></h3>
+                              <br>
+                              <hr>
+                              <h2 class="card-text ml-2" th:text="'₹' + ${product.price}"></h2>
+                              <h4 class="card-text ml-2 text-danger font-weight-bold" th:text="${product.discount} + '% off'"></h4>
+                              <p>Inclusive of all taxes</p>
+                              <br>
+                              <hr>
+                              <i class="fa fa-truck fa-2x ml-5 mr-5"></i>
+                              <i class="fas fa-dollar fa-2x ml-5 mr-5"></i>
+                              <i class="fas fa-exchange fa-2x ml-5 mr-5"></i>
+                              <i class="fa fa-shield fa-2x ml-5 mr-5"></i>
+                              <em class="ml-4" style="font-size: 13px;">Free Delivery</em>
+                              <em class="ml-4" style="font-size: 13px;">Cash On Delivery</em>
+                              <em class="ml-4" style="font-size: 13px;">10days Replacement</em>
+                              <em class="ml-4" style="font-size: 13px;">1year warranty</em>
+                              <br>
+                              <hr>
+                              <table class="ml-3">
+                                <tr>
+                                    <td>Brand: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td th:text="${product.brand}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Name: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td th:text="${product.name}"></td>
+                                </tr>
+                                <tr>
+                                    <td>In-Stock: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td th:text="${product.quantity}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Price: &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    <td th:text="'₹' + ${product.price}"></td>
+                                </tr>
+                              </table>
+                              <br>
+                              <hr>
+                              <br>
+                              <a th:href="@{/login}" class="btn btn-block btn-primary">Buy Now</a>
+                              <a th:href="@{/login}" class="btn btn-block btn-secondary">Add to Cart</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
