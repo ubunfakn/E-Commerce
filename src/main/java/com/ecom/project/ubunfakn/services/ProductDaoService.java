@@ -157,4 +157,10 @@ public class ProductDaoService {
             return null;
         }
     }
+
+    public List<Product> findByNameContainingKeyword(String keyWord)
+    {
+        List<Product> list = this.findByNameContainingKeyword(keyWord);
+        return list;
+    }
 }

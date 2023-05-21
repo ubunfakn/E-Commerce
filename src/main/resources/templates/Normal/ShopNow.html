@@ -58,7 +58,7 @@
                               <br>
                               <hr>
                               <br>
-                              <a th:href="@{url}" class="btn btn-block btn-primary">Buy Now</a>
+                              <a th:href="@{'/user/' + ${product.id} + '/buy/' + ${product.name}}" class="btn btn-block btn-primary">Buy Now</a>
                               <a th:href="@{'/user/' + ${product.id} + '/cart/' + ${product.name}}" class="btn btn-block btn-secondary">Add to Cart</a>
                             </div>
                           </div>

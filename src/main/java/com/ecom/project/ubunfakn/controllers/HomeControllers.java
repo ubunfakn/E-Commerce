@@ -271,11 +271,20 @@ public class HomeControllers {
 
         for(int i=0; i<products.size();i++)
         {
-            int quantity=(int)((Math.random()*(200-25))+25);
-            int discount=(int)((Math.random()*(65-15))+15);
-            products.get(i).setQuantity(quantity);
-            products.get(i).setDiscount(discount);
-            this.productDaoService.saveProduct(products.get(i));
+            // int quantity=(int)((Math.random()*(200-25))+25);
+            // int discount=(int)((Math.random()*(65-15))+15);
+            // products.get(i).setQuantity(quantity);
+            // products.get(i).setDiscount(discount);
+            // this.productDaoService.saveProduct(products.get(i));
+
+            // int discount = products.get(i).getDiscount();
+            // StringBuilder s=new StringBuilder(products.get(i).getPrice());
+            // for(int j=0;j<s.length();j++)if(s.charAt(j)==',' || s.charAt(j)==' ')s.deleteCharAt(j);
+            // int price = Integer.parseInt(s.toString());
+            // int mrp = ((discount*price)/100)+price;
+            // products.get(i).setMrp(mrp);
+            // this.productDaoService.saveProduct(products.get(i));
+            
         }
         return "done";
     }

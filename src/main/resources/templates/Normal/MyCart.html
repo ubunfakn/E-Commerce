@@ -11,9 +11,27 @@
     <body>
         <section>
            <div class="container-fluid">
-            <h1 class="mt-4 mb-3 ml-4 text-white">Shopping Cart</h1><hr>
+            <h1 class="mt-4 font-weight-bold text-center mb-3 ml-4 text-white">Shopping Cart</h1><hr>
             <div class="row mt-3 mb-4">
-                <div class="col-xl-10 mb-4 mt-3" th:each="item : ${product}">
+                    <div class="card mt-3 bg-dark text-white col-md-4 offset-xl-2">
+                        <div class="card-body">
+                            <table>
+                                <tr>
+                                    <td class="font-weight-bold" style="font-size: 24px;">Total Amount: </td>
+                                    <td class="font-weight-bold" style="font-size: 24px;" th:text="'₹ ' + ${sum}"></td>
+                                </tr>
+                                <tr>
+                                    <td><p class="text-success">Your orders are eligible for free delivery</p></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a th:href="@{'/user/cart/' + ${sum}}" class="btn bg-warning text-white font-weight-bold">Proceed to buy</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                <div class="col-xl-10 mb-4 mt-5 offset-md-2" th:each="item : ${product}">
                     <div class="card mbcard mb-1 d-flex align-items-stretch" style="max-width: 1040px;">
                         <div class="row no-gutters">
                             <div class="col-md-3">
@@ -26,26 +44,57 @@
                                     <p class="card-text" th:text="${item.description}"></p>
                                     <!-- <h6>Qty: 1</h6> -->
                                     <div>
-                                    <label for="qty">QTY:</label>
-                                    <select onselect="quantity()" id="qty" class="col-md-1">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select>
+                                    <!-- <label for="qty">QTY:</label> -->
+                                    <!-- <input name="qty" id="qty" class="col-md-2 quant" value="1"> -->
                                 </div>
                                     <p class="text-success mt-1">In Stock</p>
                                     <!-- <p class="text-danger">You can edit quantity while checkout</p> -->
                                     <a type="button" class="btn btn-danger col-md-3 font-weight-bold" th:href="@{'/user/' + ${item.id} + '/delete/' + ${item.name}}">Delete</a>
-                                    <h2 class="mt-2" th:text="'₹' + ${item.price}"></h2>
+                                    <h2 class="mt-2" id="priceOfItem" th:text="'₹' + ${item.price}"></h2>
                                 </div>   
                             </div>
+                            
                         </div>
                     </div>
                 </div>  
             </div>
         </div>
-    </div>
-    </div>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" 
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" 
+            crossorigin="anonymous"></script>
+    <script th:src="@{/JS/logic.js}"></script>
+
+    <script>
+        console.log("I am there")
+        // document.addEventListener('click', quantity)
+        // function quantity()
+        // {
+        //     var quan = $("#qty").find(":selected").val();
+        //     var price = $("#priceOfItem").text();
+
+        //     price = price.replace("₹","")
+        //     console.log(price);
+        //     price = price.replace(",","");
+        //     console.log(price);
+        //     var calc = quan*price
+        //     $("#priceOfItem").html("₹" + calc.toLocaleString("en-IN"));
+        // }
+
+        $(document).ready(function(){
+            localStorage.setItem("price", $("#priceOfItem").text());
+            $(".quant").keyup(function(){
+                var quan = $("#qty").val();
+                var price = localStorage.getItem("price");
+                price = price.replace("₹","");
+                price = price.replace(",","");
+                var calc = quan*price
+                console.log(calc + " " + quan + " " + price );
+                calc=calc.toLocaleString("en-IN");
+                $("#priceOfItem").text(calc);
+
+            })
+        })
+    </script> -->
         </section>
     </body>
 </html>

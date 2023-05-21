@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="Normal/base copy ::
+    Layout(~{::section})">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <section>
+            <div class="container mt-1">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 mt-5" th:each="address : ${address}">
+                        <div class="card mt-4">
+                            <div class="card-body mt-3">
+                                <h4 th:text="${address.name}"></h4>
+                                <h4 th:text="${address.phone}"></h4>
+                                <hr>
+                                <h5 th:text="${address.house} + ' ' + ' ' + ${address.street}"></h5>
+                                <h5 th:text="${address.district} + ' ' + ${address.state}"></h5>
+                                <h5 th:text="${address.pincode}"></h5>
+                                <h5 th:text="${address.country}"></h5>
+                                <hr>
+                                <a onclick="paymentStart()" class="btn btn-block btn-success font-weight-bold text-white" th:href="@{'/user/order_confirm/' + ${id} + '/' + ${address.id}}">Deliver this to address</a>
+                                <a class="btn btn-primary btn-block font-weight-bold text-white" th:href="@{'/user/' + ${id} + '/address'}">Add new Address</a>
+                                <input class="getId" hidden="true" th:value="${id}">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </section>
+    </body>
+</html>

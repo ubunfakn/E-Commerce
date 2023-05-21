@@ -82,4 +82,10 @@ public class MyCartDaoService {
         return myCart2;
     }
 
+    public List<MyCart> getAllCart()
+    {
+        List<MyCart> myCarts = this.myCartDao.findAll();
+        return myCarts;
+    }
+
 }

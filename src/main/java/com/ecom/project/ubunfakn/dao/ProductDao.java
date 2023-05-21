@@ -39,4 +39,6 @@ public interface ProductDao extends JpaRepository<Product,Integer> {
     @Query("select p from Product p where p.discount>=:p")
     public List<Product> getAllByExactDiscount(@Param("p")int p);
 
+    public List<Product> findByNameContaining(String keyWord);
+
 }
