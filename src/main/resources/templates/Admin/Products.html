@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="Normal/base copy ::
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="Admin/base copy ::
     Layout(~{::section})">
     <head>
         <meta charset="UTF-8">
@@ -36,8 +36,12 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body d-flex flex-column" >
-                                            <p class="card-text font-weight-bold font-italic" th:text="${item.name}"></p>
+                                            <h5 class="card-text font-weight-bold font-italic" th:text="${item.name}"></h5>
                                             <p class="card-text" th:text="${item.description}"></p>
+                                            <h5 class="font-weight-bold" th:text="'MRP: ' + '₹ ' + ${item.mrp} + '.00'"></h5>
+                                            <h5 class="font-weight-bold" th:text="'In Stock: ' + ${item.quantity}"></h5>
+                                            <h5 class="" th:text="'Category: ' + ${item.category}"></h5>
+                                            <h5 class="font-weight-bold" th:text="'Brand: ' + ${item.brand}"></h5>
                                         </div>
                                         
                                         </div>
@@ -46,16 +50,15 @@
                                         <div class="d-flex flex-row justify-content-center mt-auto">
                                             <h5 class="text-dark font-weight-bold
                                         font-italic" th:text="${'₹ ' +
-                                        item.price}" style="font-size: 30px;"></h5><h5 class="ml-4 bg-danger text-white" th:text="${item.discount} + '% off'" style="padding: 5px;"></h5></div>
-                                        <div class="d-flex flex-row justify-content-center mt-auto">
+                                        item.price}" style="font-size: 30px;"></h5><h5 class="ml-4 bg-danger text-white" th:text="${item.discount} + '% off'" style="padding: 5px;"></h5>
+                                    </div>
+                                        <!-- <div class="d-flex flex-row justify-content-center mt-auto">
                                         <a class="btn btn-block btn-success align-self-end "
-                                        type="button" th:href="@{${item.id} + '/product/' + ${item.name}}">Shop Now</a></div>
+                                        type="button" th:href="@{${item.id} + '/product/' + ${item.name}}">Shop Now</a></div> -->
                                         <div class="d-flex flex-row justify-content-center mt-2">
-                                    <a class="btn btn-block btn-danger"
-                                        type="button" th:href="@{'/user/' + ${item.id} +
-                                        '/cart/' + ${item.name}}"><i
-                                            class="fa-solid fa-cart-shopping "></i>
-                                        Add to Cart</a></div>
+                                    <a class="btn btn-block btn-danger font-weight-bold"
+                                        type="button" th:href="@{'/user/admin/delete/' + ${item.id}}">
+                                        Delete this Product</a></div>
                                         </div>
                             </div>
                             </div>

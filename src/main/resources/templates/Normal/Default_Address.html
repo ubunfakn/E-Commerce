@@ -22,8 +22,9 @@
                                 <h5 th:text="${address.pincode}"></h5>
                                 <h5 th:text="${address.country}"></h5>
                                 <hr>
-                                <a onclick="paymentStart()" class="btn btn-block btn-success font-weight-bold text-white" th:href="@{'/user/order_confirm/' + ${id} + '/' + ${address.id}}">Deliver this to address</a>
+                                <a onclick="paymentStart()" class="btn btn-block btn-success font-weight-bold text-white" th:href="@{'/user/order_confirm/' + ${id} + '/' + ${address.id}}">Deliver to this address</a>
                                 <a class="btn btn-primary btn-block font-weight-bold text-white" th:href="@{'/user/' + ${id} + '/address'}">Add new Address</a>
+                                <a class="btn btn-danger btn-block font-weight-bold text-white" th:href="@{'/user/delete/' + ${address.id}}">Delete this Address</a>
                                 <input class="getId" hidden="true" th:value="${id}">
                             </div>
                         </div>

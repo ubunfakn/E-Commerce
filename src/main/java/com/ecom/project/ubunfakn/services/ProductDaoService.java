@@ -163,4 +163,15 @@ public class ProductDaoService {
         List<Product> list = this.findByNameContainingKeyword(keyWord);
         return list;
     }
+
+    public void deleteProductByProductId(int id)
+    {
+        try
+        {
+            this.productDao.delete(this.productDao.getByProductId(id));
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

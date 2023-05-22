@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyCart {
+public class Orders {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,7 @@ public class MyCart {
     private int uid;
     int productMrp;
 
-    private int price;
+    private String price;
+    private String paymentStatus;
 
 }

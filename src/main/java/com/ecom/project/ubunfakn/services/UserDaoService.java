@@ -50,6 +50,21 @@ public class UserDaoService {
         {
             e.printStackTrace();
         }
+        
+        
         return users;
+    }
+
+    public User getUserByUserId(int id)
+    {
+        try
+        {
+            User user = this.userDao.findById(id);
+            return user;
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -44,7 +44,30 @@ public class AddressDaoService {
 
     public Address getById(int id)
     {
-        Address address = this.addressDao.findById(id);
+        Address address=null;
+        try
+        {
+            address = this.addressDao.findById(id);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         return address;
+    }
+
+    public boolean deletAddressById(int id)
+    {
+        boolean f=false;
+        Address address=null;
+        try
+        {
+            address = this.addressDao.findById(id);
+            this.addressDao.delete(address);
+            f=true;
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return f;
     }
 }

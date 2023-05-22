@@ -2,6 +2,7 @@ package com.ecom.project.ubunfakn.controllers;
 
 import java.io.File;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,6 +17,8 @@ import com.ecom.project.ubunfakn.helpers.Message;
 
 import com.ecom.project.ubunfakn.entities.*;
 import com.ecom.project.ubunfakn.services.*;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -30,6 +33,9 @@ public class AdminController {
 
     @Autowired
     ProductDaoService productDaoService;
+
+    @Autowired
+    OrdersDaoService ordersDaoService;
 
     @GetMapping("/")
     public String admin(Model model)
@@ -90,6 +96,17 @@ public class AdminController {
         // System.out.println(categories);
         product.setCategories(categories);
 
+
+        StringBuilder s=new StringBuilder(product.getPrice());
+        for(int j=0;j<s.length();j++)if(s.charAt(j)==',' || s.charAt(j)==' ')s.deleteCharAt(j);
+        int price = Integer.parseInt(s.toString());
+        int dis=product.getMrp()-price;
+        dis=dis*100;
+        dis=dis/product.getMrp();
+        product.setDiscount(dis);
+        int quantity=(int)((Math.random()*(200-25))+25);
+        product.setQuantity(quantity);
+    
         boolean f=this.productDaoService.saveProduct(product);
 
         if(f==true)
@@ -98,30 +115,107 @@ public class AdminController {
         return "redirect:/user/admin/addpro";
     }
 
-    // @GetMapping("/del")
-    // @ResponseBody
-    // public String delete()
-    // {
-    //     boolean f=this.categoriesDaoService.deleteAllCat();
-    //     if(f==true)
-    //     return "deleted";
+    @GetMapping("/kitchen")
+    public String kitchen(Model model)
+    {
+        model.addAttribute("title", "Kitchen");
 
-    //     else return "ohhh no";
-    // }
+        Categories categories = this.categoriesDaoService.getCatByName("Kitchen");
+        List<Product> kitchen = this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", kitchen);
+        return "Admin/Products";
+    }
 
-    // @GetMapping("/edit")
-    // @ResponseBody
-    // public String edit()
-    // {
-    //     Categories categories = this.categoriesDaoService.getCatByName("Beauty");
 
-    //     List<Product> products = this.productDaoService.getByCat(categories.getName());
-    //     for(int i=0;i<products.size();i++)
-    //     {
-    //         products.get(i).setCategories(categories);
-    //         this.productDaoService.saveProduct(products.get(i));
-    //     }
+    @GetMapping("/mobile")
+    public String mobiles(Model model)
+    {
+        model.addAttribute("title", "Mobiles");
 
-    //     return "updated";
-    // }
+        Categories categories = this.categoriesDaoService.getCatByName("Mobile");
+        List<Product> mobiles=this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", mobiles);
+        return "Admin/Products";
+    }
+
+    @GetMapping("/beauty")
+    public String beauty(Model model)
+    {
+        model.addAttribute("title", "Beauty");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Beauty");
+        List<Product> beau = this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", beau);
+
+        return "Admin/Products";
+    }
+
+    @GetMapping("/fashion")
+    public String fashion(Model model)
+    {
+        model.addAttribute("title", "Fashion");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Fashion");
+        List<Product> fash=this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", fash);
+
+        return "Admin/Products";
+    }
+    @GetMapping("/furniture")
+    public String furniture(Model model)
+    {
+        model.addAttribute("title", "Furniture");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Furniture");
+        List<Product> furn = this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", furn);
+
+        return "Admin/Products";
+    }
+
+    @GetMapping("/computer")
+    public String computers(Model model)
+    {
+        model.addAttribute("title", "Computers");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Computers");
+        List<Product> computer = this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", computer);
+
+        return "Admin/Products";
+    }
+
+    @GetMapping("/electronic")
+    public String electronics(Model model)
+    {
+        model.addAttribute("title", "Electronics");
+
+        Categories categories = this.categoriesDaoService.getCatByName("Electronics");
+        List<Product> electronic = this.productDaoService.getByCatId(categories.getId());
+        model.addAttribute("product", electronic);
+
+        return "Admin/Products";
+    }
+
+    @GetMapping("/allorders")
+    public String allOrders(Model model)
+    {
+        model.addAttribute("title", "All Orders");
+        List<Orders> orders = this.ordersDaoService.getAllOrders();
+        List<Product> products = new ArrayList<>();
+        for(int i=0;i<orders.size();i++)
+        {
+            Product product = this.productDaoService.getProductByProductId(orders.get(i).getPid());
+            products.add(product);
+        }
+        model.addAttribute("product", products);
+        return "Admin/Orders";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable("id")int id, HttpServletRequest request)
+    {
+        this.productDaoService.deleteProductByProductId(id);
+        return "redirect:"+request.getHeader("Referer");
+    }
 }

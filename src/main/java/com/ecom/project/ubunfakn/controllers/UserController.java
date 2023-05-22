@@ -3,7 +3,6 @@ package com.ecom.project.ubunfakn.controllers;
 import java.security.Principal;
 import java.util.*;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import com.ecom.project.ubunfakn.entities.*;
 
 import com.ecom.project.ubunfakn.services.*;
-import com.razorpay.Order;
-import com.razorpay.RazorpayClient;
-import com.razorpay.RazorpayException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import com.ecom.project.ubunfakn.helpers.Message;;
@@ -44,6 +41,9 @@ public class UserController {
 
     @Autowired
     AddressDaoService addressDaoService;
+
+    @Autowired
+    OrdersDaoService ordersDaoService;
 
 
 
@@ -130,7 +130,7 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public String userHome(Model model)
+    public String userHome(Model model,Principal principal)
     {
         List<Product> products = this.productDaoService.getAllByDiscount(30);
         model.addAttribute("product", products.subList(0, 4));
@@ -168,6 +168,7 @@ public class UserController {
         List<MyCart> myCarts = this.myCartDaoService.getAllCart();
         for(int i=0;i<myCarts.size();i++)
         {
+            if(this.userDaoService.getUserByEmail(principal.getName()).getId()==myCarts.get(i).getUid())
             sum+=myCarts.get(i).getPrice();
         }
         
@@ -191,9 +192,13 @@ public class UserController {
         for(int i=0;i<s.length();i++)if(s.charAt(i)==',' || s.charAt(i)==' ')s.deleteCharAt(i);
         int price = Integer.parseInt(s.toString());
 
+            int discount = product.getDiscount();
+            int mrp = ((discount*price)/100)+price;
+
         myCart.setPid(id);
         myCart.setUid(this.userDaoService.getUserByEmail(principal.getName()).getId());
         myCart.setPrice(price);
+        myCart.setProductMrp(mrp);
 
 
         boolean f = this.myCartDaoService.savetoMyCart(myCart);
@@ -226,12 +231,16 @@ public class UserController {
     {
         model.addAttribute("id", id);
         List<Address> addresses = this.addressDaoService.getAllAddressByUserId(this.userDaoService.getUserByEmail(principal.getName()).getId());
-        if(addresses == null)
-        return "Normal/Address";
+        if(addresses.isEmpty())
+        {
+            model.addAttribute("title", "Add Address Address");
+            return "Normal/Address";
+        }
         else 
         {
             model.addAttribute("address", addresses);
             model.addAttribute("id", id);
+            model.addAttribute("title", "Delivery Address");
             return "Normal/Default_Address";
         }
     }
@@ -240,7 +249,36 @@ public class UserController {
     public String AddressFormHandler(@PathVariable("id")int id, @ModelAttribute Address address, Principal principal, HttpSession session, Model model)
     {
         address.setUId(this.userDaoService.getUserByEmail(principal.getName()).getId());
+        List<Integer> pids = this.myCartDaoService.getAllProductId(this.userDaoService.getUserByEmail(principal.getName()).getId());
+        List<Product> products=new ArrayList<>();
+        System.out.println(pids);
+        // long sum=0;
+        for(int i=0;i<pids.size();i++)
+        {
+            Product product = this.productDaoService.getProductByProductId(pids.get(i));
+            // System.out.println(product);
+            products.add(product);
+        }
+        model.addAttribute("products", products);
         boolean f = this.addressDaoService.saveAddress(address);
+        List<MyCart> myCarts = this.myCartDaoService.getAllCart();
+        int mrpSum=0;
+        for(int i=0;i<myCarts.size();i++)
+        {
+            if(this.userDaoService.getUserByEmail(principal.getName()).getId()==myCarts.get(i).getUid())
+            mrpSum+=myCarts.get(i).getProductMrp();
+        }
+        List<MyCart> myCartss = this.myCartDaoService.getAllCart();
+        int sum=0;
+        for(int i=0;i<myCarts.size();i++)
+        {
+            if(this.userDaoService.getUserByEmail(principal.getName()).getId()==myCarts.get(i).getUid())
+            sum+=myCartss.get(i).getPrice();
+        }
+
+        model.addAttribute("mrpsum", mrpSum);
+        model.addAttribute("sum", sum);
+
         model.addAttribute("id", id);
         if(f==false)
         {
@@ -250,26 +288,147 @@ public class UserController {
         model.addAttribute("address", address);
         Product product = this.productDaoService.getProductByProductId(id);
         model.addAttribute("item", product);
-        return "Normal/order_confirm";
+        model.addAttribute("title", "Order");
+        if(id==-5)
+        {
+            for(int i=0;i<products.size();i++)
+            {
+                Orders orders = new Orders();
+                orders.setPaymentStatus("COD");
+                orders.setPid(products.get(i).getId());
+                orders.setPrice(products.get(i).getPrice());
+                orders.setProductMrp(products.get(i).getMrp());
+                orders.setUid(this.userDaoService.getUserByEmail(principal.getName()).getId());
+                this.ordersDaoService.savetoOrders(orders);
+            }
+            return "Normal/Cart_Order_Confirm";
+        }
+        else{
+            Orders orders = new Orders();
+            orders.setPaymentStatus("COD");
+            orders.setPid(product.getId());
+            orders.setPrice(product.getPrice());
+            orders.setProductMrp(product.getMrp());
+            orders.setUid(this.userDaoService.getUserByEmail(principal.getName()).getId());
+            this.ordersDaoService.savetoOrders(orders);
+            return "Normal/order_confirm";
+        }
     }
 
     @GetMapping("/{id}/address")
     public String addressopener(@PathVariable("id")int id, Model model)
     {
         model.addAttribute("id", id);
+        model.addAttribute("title", "Add Address");
         return "Normal/Address";
     }
 
     @GetMapping("/order_confirm/{id}/{aid}")
-    public String orderConfirm(@PathVariable("id")int id, @PathVariable("aid")int aid ,Model model)
+    public String orderConfirm(@PathVariable("id")int id, @PathVariable("aid")int aid ,Model model, Principal principal)
     {
         model.addAttribute("order", id);
 
-        Address address = this.addressDaoService.getById(aid);
-        model.addAttribute("address", address);
+        List<Integer> pids = this.myCartDaoService.getAllProductId(this.userDaoService.getUserByEmail(principal.getName()).getId());
+        List<Product> products=new ArrayList<>();
+        for(int i=0;i<pids.size();i++)
+        {
+            Product product = this.productDaoService.getProductByProductId(pids.get(i));
+            // System.out.println(product);
+            products.add(product);
+        }
 
+        List<MyCart> myCarts = this.myCartDaoService.getAllCart();
+        int mrpSum=0;
+        for(int i=0;i<myCarts.size();i++)
+        {
+            if(this.userDaoService.getUserByEmail(principal.getName()).getId()==myCarts.get(i).getUid())
+            mrpSum+=myCarts.get(i).getProductMrp();
+        }
+
+        Address address = this.addressDaoService.getById(aid);
         Product product = this.productDaoService.getProductByProductId(id);
+
+        List<MyCart> myCartss = this.myCartDaoService.getAllCart();
+        int sum=0;
+        for(int i=0;i<myCarts.size();i++)
+        {
+            if(this.userDaoService.getUserByEmail(principal.getName()).getId()==myCarts.get(i).getUid())
+            sum+=myCartss.get(i).getPrice();
+        }
+
+        model.addAttribute("mrpsum", mrpSum);
+        model.addAttribute("address", address);
         model.addAttribute("item", product);
-        return "Normal/order_confirm";
+        model.addAttribute("sum", sum);
+        model.addAttribute("title", "Order");
+        if(id==-5)
+        {
+            for(int i=0;i<products.size();i++)
+            {
+                Orders orders = new Orders();
+                orders.setPaymentStatus("COD");
+                orders.setPid(products.get(i).getId());
+                orders.setPrice(products.get(i).getPrice());
+                orders.setProductMrp(products.get(i).getMrp());
+                orders.setUid(this.userDaoService.getUserByEmail(principal.getName()).getId());
+                this.ordersDaoService.savetoOrders(orders);
+            }
+            model.addAttribute("mrpsum", mrpSum);
+            model.addAttribute("address", address);
+            model.addAttribute("products", products);
+            return "Normal/Cart_Order_Confirm";
+        }
+        else
+        {
+            Orders orders = new Orders();
+            orders.setPaymentStatus("COD");
+            orders.setPid(product.getId());
+            orders.setPrice(product.getPrice());
+            orders.setProductMrp(product.getMrp());
+            orders.setUid(this.userDaoService.getUserByEmail(principal.getName()).getId());
+            this.ordersDaoService.savetoOrders(orders);
+            return "Normal/order_confirm";
+        }
+    }
+
+    @GetMapping("/cart/address")
+    public String cartrAddress(Model model, Principal principal)
+    {
+        model.addAttribute("id", 1);
+        List<Address> addresses = this.addressDaoService.getAllAddressByUserId(this.userDaoService.getUserByEmail(principal.getName()).getId());
+        if(addresses == null)
+        return "Normal/Address";
+        else 
+        {
+            model.addAttribute("address", addresses);
+            model.addAttribute("id", -5);
+            model.addAttribute("title", "Delivery Address");
+            return "Normal/Default_Address";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteAddress(@PathVariable("id")int aid, HttpServletRequest request, Model model)
+    {
+        this.addressDaoService.deletAddressById(aid);
+        String referer = request.getHeader("Referer");
+        model.addAttribute("title", "Delivery Address");
+        return "redirect:"+referer;
+    }
+
+    @GetMapping("/orders")
+    public String orderPage(Model model, Principal principal)
+    {
+        model.addAttribute("title", "My-Orders");
+        List<Integer> pids = this.ordersDaoService.getAllProductId(this.userDaoService.getUserByEmail(principal.getName()).getId());
+        List<Product> products=new ArrayList<>();
+        for(int i=0;i<pids.size();i++)
+        {
+            Product product = this.productDaoService.getProductByProductId(pids.get(i));
+            // System.out.println(product);
+            products.add(product);
+        }
+        model.addAttribute("product", products);
+        return "Normal/Orders";
     }
 }

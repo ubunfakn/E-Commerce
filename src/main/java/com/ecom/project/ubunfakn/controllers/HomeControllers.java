@@ -33,6 +33,9 @@ public class HomeControllers {
     CategoriesDaoService categoriesDaoService;
 
     @Autowired
+    MyCartDaoService myCartDaoService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
@@ -286,6 +289,14 @@ public class HomeControllers {
             // this.productDaoService.saveProduct(products.get(i));
             
         }
+
+        // List<MyCart> myCarts = this.myCartDaoService.getAllCart();
+        // for(int i=0;i<myCarts.size();i++)
+        // {
+        //     Product product = this.productDaoService.getProductByProductId(myCarts.get(i).getPid());
+        //     myCarts.get(i).setProductMrp(product.getMrp());
+        //     this.myCartDaoService.savetoMyCart(myCarts.get(i));
+        // }
         return "done";
     }
 
