@@ -12,15 +12,18 @@ import com.ecom.project.ubunfakn.entities.*;
 
 import com.ecom.project.ubunfakn.services.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import com.ecom.project.ubunfakn.helpers.Message;;
+
+
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
     
+
+    /***********************************Declaration********************************************* */
     @Autowired
     UserDaoService userDaoService;
 
@@ -46,25 +49,28 @@ public class UserController {
     OrdersDaoService ordersDaoService;
 
 
-
+    /********************************************Functions***************************************** */
     @GetMapping("/mobile")
     public String mobiles(Model model)
     {
-        model.addAttribute("title", "Mobiles");
-
         Categories categories = this.categoriesDaoService.getCatByName("Mobile");
         List<Product> mobiles=this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Mobiles");
         model.addAttribute("product", mobiles);
+
         return "Normal/Products";
     }
+
+
 
     @GetMapping("/kitchen")
     public String kitchen(Model model)
     {
-        model.addAttribute("title", "Kitchen");
-
         Categories categories = this.categoriesDaoService.getCatByName("Kitchen");
         List<Product> kitchen = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Kitchen");
         model.addAttribute("product", kitchen);
 
         return "Normal/Products";
@@ -73,10 +79,10 @@ public class UserController {
     @GetMapping("/beauty")
     public String beauty(Model model)
     {
-        model.addAttribute("title", "Beauty");
-
         Categories categories = this.categoriesDaoService.getCatByName("Beauty");
         List<Product> beau = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Beauty");
         model.addAttribute("product", beau);
 
         return "Normal/Products";
@@ -85,10 +91,10 @@ public class UserController {
     @GetMapping("/fashion")
     public String fashion(Model model)
     {
-        model.addAttribute("title", "Fashion");
-
         Categories categories = this.categoriesDaoService.getCatByName("Fashion");
         List<Product> fash=this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Fashion");
         model.addAttribute("product", fash);
 
         return "Normal/Products";
@@ -96,10 +102,10 @@ public class UserController {
     @GetMapping("/furniture")
     public String furniture(Model model)
     {
-        model.addAttribute("title", "Furniture");
-
         Categories categories = this.categoriesDaoService.getCatByName("Furniture");
         List<Product> furn = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Furniture");
         model.addAttribute("product", furn);
 
         return "Normal/Products";
@@ -108,10 +114,10 @@ public class UserController {
     @GetMapping("/computer")
     public String computers(Model model)
     {
-        model.addAttribute("title", "Computers");
-
         Categories categories = this.categoriesDaoService.getCatByName("Computers");
         List<Product> computer = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Computers");
         model.addAttribute("product", computer);
 
         return "Normal/Products";
@@ -120,10 +126,10 @@ public class UserController {
     @GetMapping("/electronic")
     public String electronics(Model model)
     {
-        model.addAttribute("title", "Electronics");
-
         Categories categories = this.categoriesDaoService.getCatByName("Electronics");
         List<Product> electronic = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Electronics");
         model.addAttribute("product", electronic);
 
         return "Normal/Products";
@@ -132,48 +138,50 @@ public class UserController {
     @GetMapping("/")
     public String userHome(Model model,Principal principal)
     {
+        User user = this.userDaoService.getUserByEmail(principal.getName());
+        if(user.getRole()==Role.ROLE_ADMIN){
+            return "redirect:/user/admin/";
+        }
         List<Product> products = this.productDaoService.getAllByDiscount(30);
-        model.addAttribute("product", products.subList(0, 4));
-
-        List<Product> pro = this.productDaoService.getAllByExactDiscount(60);
-        model.addAttribute("pro", pro.subList(0, 4));
-
-        List<Product> mobiles = this.productDaoService.getByCat("Mobile");
-        model.addAttribute("mobile", mobiles.subList(0, 4));
-
-        List<Product> elect = this.productDaoService.getByCat("Electronics");
-        model.addAttribute("elec", elect.subList(0, 4));
-
         List<Product> comp = this.productDaoService.getByCat("Computers");
-        model.addAttribute("comp", comp.subList(0, 4));
+        List<Product> elect = this.productDaoService.getByCat("Electronics");
+        List<Product> mobiles = this.productDaoService.getByCat("Mobile");
+        List<Product> pro = this.productDaoService.getAllByExactDiscount(60);
 
+        model.addAttribute("product", products.subList(0, 4));
+        model.addAttribute("pro", pro.subList(0, 4));
+        model.addAttribute("mobile", mobiles.subList(0, 4));
+        model.addAttribute("elec", elect.subList(0, 4));
+        model.addAttribute("comp", comp.subList(0, 4));
         model.addAttribute("title", "User-Home");
+
         return "Normal/home";
     }
 
     @GetMapping("/cart")
     public String cartOpen(Model model, Principal principal)
     {
-        model.addAttribute("title", "My-Cart");
         List<Integer> pids = this.myCartDaoService.getAllProductId(this.userDaoService.getUserByEmail(principal.getName()).getId());
         List<Product> products=new ArrayList<>();
-        System.out.println(pids);
+        List<MyCart> myCarts = this.myCartDaoService.getAllCart();
         long sum=0;
+
         for(int i=0;i<pids.size();i++)
         {
             Product product = this.productDaoService.getProductByProductId(pids.get(i));
-            // System.out.println(product);
             products.add(product);
         }
-        List<MyCart> myCarts = this.myCartDaoService.getAllCart();
+        
         for(int i=0;i<myCarts.size();i++)
         {
             if(this.userDaoService.getUserByEmail(principal.getName()).getId()==myCarts.get(i).getUid())
             sum+=myCarts.get(i).getPrice();
         }
-        
+
+        model.addAttribute("title", "My-Cart");
         model.addAttribute("sum", sum);
         model.addAttribute("product", products);
+        
         return "Normal/MyCart";
     }
 
@@ -396,10 +404,11 @@ public class UserController {
     {
         model.addAttribute("id", 1);
         List<Address> addresses = this.addressDaoService.getAllAddressByUserId(this.userDaoService.getUserByEmail(principal.getName()).getId());
-        if(addresses == null)
+        if(addresses.size()==0)
         return "Normal/Address";
         else 
         {
+            System.out.println("address " + addresses.size());
             model.addAttribute("address", addresses);
             model.addAttribute("id", -5);
             model.addAttribute("title", "Delivery Address");

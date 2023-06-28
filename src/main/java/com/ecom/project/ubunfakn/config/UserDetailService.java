@@ -8,9 +8,13 @@ import com.ecom.project.ubunfakn.services.UserDaoService;
 
 public class UserDetailService implements UserDetailsService{
 
+
+    /************************Declaration********************** */
     @Autowired
     UserDaoService userDaoService;
 
+    
+    /****************************Function*************************** */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 

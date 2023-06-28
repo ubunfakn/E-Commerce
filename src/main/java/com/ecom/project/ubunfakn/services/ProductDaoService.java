@@ -158,9 +158,9 @@ public class ProductDaoService {
         }
     }
 
-    public List<Product> findByNameContainingKeyword(String keyWord)
+    public List<Product> findByNameKeyword(String keyWord)
     {
-        List<Product> list = this.findByNameContainingKeyword(keyWord);
+        List<Product> list = this.productDao.findByNameContaining(keyWord);
         return list;
     }
 
@@ -174,4 +174,5 @@ public class ProductDaoService {
             e.printStackTrace();
         }
     }
+
 }

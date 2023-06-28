@@ -9,15 +9,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ecom.project.ubunfakn.entities.User;
 
+
 public class CustomeUserDetailService implements UserDetails{
 
+    /******************Declaration***************** */
     private User user;
 
+
+    /******************Constructor***************** */
     CustomeUserDetailService(User user)
     {
         this.user=user;
     }
 
+
+    /******************Function***************** */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority simpleGrantedAuthority=null;
@@ -32,6 +38,7 @@ public class CustomeUserDetailService implements UserDetails{
         return List.of(simpleGrantedAuthority);
     }
 
+
     @Override
     public String getPassword() {
         try
@@ -44,6 +51,8 @@ public class CustomeUserDetailService implements UserDetails{
         }
         return "";
     }
+
+
 
     @Override
     public String getUsername() {
@@ -58,21 +67,28 @@ public class CustomeUserDetailService implements UserDetails{
         return "";
     }
 
+
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
+
 
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+
+    
     @Override
     public boolean isEnabled() {
         return true;

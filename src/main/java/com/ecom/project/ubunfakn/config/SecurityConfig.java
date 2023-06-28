@@ -11,22 +11,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 
+
 @Configuration
 public class SecurityConfig {
     
-
+    
+    /****************************Function********************************** */
     @Bean
     public UserDetailsService userDetailsService()
     {
         return new UserDetailService();
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception
     {
         return httpSecurity.authorizeHttpRequests()
         .requestMatchers("/user/admin/**").hasRole("ADMIN")
-        .requestMatchers("/user/**").hasRole("USER")
+        .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
         .requestMatchers("/**").permitAll()
         .and()
         .formLogin()
@@ -37,11 +41,15 @@ public class SecurityConfig {
 
     }
 
+
+
     @Bean
     public static PasswordEncoder passwordEncoder()
     {
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     public AuthenticationProvider authenticationProvider()
@@ -51,4 +59,6 @@ public class SecurityConfig {
         daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder());
         return daoAuthenticationProvider;
     }
+
+    
 }

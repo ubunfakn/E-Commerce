@@ -2,8 +2,7 @@ package com.ecom.project.ubunfakn.controllers;
 
 import java.io.File;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +13,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.project.ubunfakn.helpers.Message;
-
+/******************Declaration***************** */
 import com.ecom.project.ubunfakn.entities.*;
 import com.ecom.project.ubunfakn.services.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
+
+
 
 @Controller
 @RequestMapping("/user/admin")
 public class AdminController {
     
+
+    /******************************Declaration************************* */
     @Autowired
     UserDaoService userDaoService;
 
@@ -37,22 +39,25 @@ public class AdminController {
     @Autowired
     OrdersDaoService ordersDaoService;
 
+
+
+    /**********************************Function***************************** */
     @GetMapping("/")
     public String admin(Model model)
     {
-        model.addAttribute("title", "ADMIN home");
-
         List<User> users= this.userDaoService.getAllUser();
-        model.addAttribute("users", users.size());
-
         List<Categories> categories= this.categoriesDaoService.getAllCategories();
-        model.addAttribute("categories", categories.size());
-
         List<Product> products= this.productDaoService.getAll();
+
+        model.addAttribute("title", "ADMIN home");
+        model.addAttribute("users", users.size());
+        model.addAttribute("categories", categories.size());
         model.addAttribute("products", products.size());
 
         return "Admin/ADMIN Home";
     }
+
+
 
     @GetMapping("/addcat")
     public String addCategoryForm(Model model)
@@ -61,24 +66,31 @@ public class AdminController {
         return "Admin/add-category";
     }
 
+
+
     @PostMapping("/submit-cat")
     public String submitCategory(@ModelAttribute Categories categories, HttpSession session)
     {
         boolean f=this.categoriesDaoService.saveCategory(categories);
-        if(f==true)
-        session.setAttribute("msg", new Message("success", "Category saved Successfully"));
+
+        if(f==true) session.setAttribute("msg", new Message("success", "Category saved Successfully"));
         else session.setAttribute("msg", new Message("danger", "Something went wrong plz try again"));
+
         return "Admin/add-category";
     }
+
+
 
     @GetMapping("/addpro")
     public String addProductForm(Model model)
     {
         model.addAttribute("title", "Add Product");
         model.addAttribute("categories", this.categoriesDaoService.getAllCategories());
+
         return "Admin/add-product";
     }
 
+    
     @PostMapping("/submit-pro")
     public String submitProduct(@ModelAttribute Product product,@RequestParam("categories.name")String name ,@RequestParam("pro-image")MultipartFile file, HttpSession session)throws Exception
     {
@@ -92,37 +104,44 @@ public class AdminController {
             Files.copy(file.getInputStream(), path , StandardCopyOption.REPLACE_EXISTING);
         }
 
+
         Categories categories = this.categoriesDaoService.getCatByName(name);
-        // System.out.println(categories);
         product.setCategories(categories);
 
 
         StringBuilder s=new StringBuilder(product.getPrice());
+
         for(int j=0;j<s.length();j++)if(s.charAt(j)==',' || s.charAt(j)==' ')s.deleteCharAt(j);
+
         int price = Integer.parseInt(s.toString());
+
         int dis=product.getMrp()-price;
         dis=dis*100;
         dis=dis/product.getMrp();
+
         product.setDiscount(dis);
+
         int quantity=(int)((Math.random()*(200-25))+25);
         product.setQuantity(quantity);
     
         boolean f=this.productDaoService.saveProduct(product);
 
-        if(f==true)
-        session.setAttribute("msg", new Message("success", "Product saved Successfully"));
+        if(f==true) session.setAttribute("msg", new Message("success", "Product saved Successfully"));
         else session.setAttribute("msg", new Message("danger", "Something went wrong plz try again"));
+
         return "redirect:/user/admin/addpro";
     }
+
 
     @GetMapping("/kitchen")
     public String kitchen(Model model)
     {
-        model.addAttribute("title", "Kitchen");
-
         Categories categories = this.categoriesDaoService.getCatByName("Kitchen");
         List<Product> kitchen = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Kitchen");
         model.addAttribute("product", kitchen);
+
         return "Admin/Products";
     }
 
@@ -130,37 +149,43 @@ public class AdminController {
     @GetMapping("/mobile")
     public String mobiles(Model model)
     {
-        model.addAttribute("title", "Mobiles");
-
         Categories categories = this.categoriesDaoService.getCatByName("Mobile");
         List<Product> mobiles=this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Mobiles");
         model.addAttribute("product", mobiles);
+
         return "Admin/Products";
     }
+
+
 
     @GetMapping("/beauty")
     public String beauty(Model model)
     {
-        model.addAttribute("title", "Beauty");
-
         Categories categories = this.categoriesDaoService.getCatByName("Beauty");
         List<Product> beau = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Beauty");
         model.addAttribute("product", beau);
 
         return "Admin/Products";
     }
 
+
     @GetMapping("/fashion")
     public String fashion(Model model)
     {
-        model.addAttribute("title", "Fashion");
-
         Categories categories = this.categoriesDaoService.getCatByName("Fashion");
         List<Product> fash=this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Fashion");
         model.addAttribute("product", fash);
 
         return "Admin/Products";
     }
+
+
     @GetMapping("/furniture")
     public String furniture(Model model)
     {
@@ -176,46 +201,53 @@ public class AdminController {
     @GetMapping("/computer")
     public String computers(Model model)
     {
-        model.addAttribute("title", "Computers");
-
         Categories categories = this.categoriesDaoService.getCatByName("Computers");
         List<Product> computer = this.productDaoService.getByCatId(categories.getId());
+        
+        model.addAttribute("title", "Computers");
         model.addAttribute("product", computer);
 
         return "Admin/Products";
     }
 
+
     @GetMapping("/electronic")
     public String electronics(Model model)
     {
-        model.addAttribute("title", "Electronics");
-
         Categories categories = this.categoriesDaoService.getCatByName("Electronics");
         List<Product> electronic = this.productDaoService.getByCatId(categories.getId());
+
+        model.addAttribute("title", "Electronics");
         model.addAttribute("product", electronic);
 
         return "Admin/Products";
     }
 
+
     @GetMapping("/allorders")
     public String allOrders(Model model)
     {
-        model.addAttribute("title", "All Orders");
         List<Orders> orders = this.ordersDaoService.getAllOrders();
         List<Product> products = new ArrayList<>();
+
         for(int i=0;i<orders.size();i++)
         {
             Product product = this.productDaoService.getProductByProductId(orders.get(i).getPid());
             products.add(product);
         }
+
+        model.addAttribute("title", "All Orders");
         model.addAttribute("product", products);
+
         return "Admin/Orders";
     }
+
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id")int id, HttpServletRequest request)
     {
         this.productDaoService.deleteProductByProductId(id);
+
         return "redirect:"+request.getHeader("Referer");
     }
 }

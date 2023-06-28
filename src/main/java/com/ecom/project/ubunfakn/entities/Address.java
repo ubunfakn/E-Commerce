@@ -19,16 +19,16 @@ public class Address {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
     @Column(name = "uid", nullable = false, columnDefinition = "int default 100") 
-    int uId;
-    String name;
-    String phone;
-    String house;
-    String street;
-    String district;
-    String state;
-    String pincode;
-    String country;
+    private int uId;
+    private String name;
+    private String phone;
+    private String house;
+    private String street;
+    private String district;
+    private String state;
+    private String pincode;
+    private String country;
 }
