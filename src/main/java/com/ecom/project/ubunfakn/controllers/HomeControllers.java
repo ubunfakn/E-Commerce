@@ -138,7 +138,7 @@ public class HomeControllers {
         {
             this.forgotPasswordService.deleteAllFromForgotPassword();
             this.forgotPasswordService.saveAll(forgotPassword);
-            this.eMailService.sendEmail(String.valueOf(otp), "Forgot Password otp verification", email, "ankitnashine12@gmail.com");
+            EMailService.sendEmail(String.valueOf(otp), "Forgot Password otp verification", email, "ankitnashine12@gmail.com");
 
         }catch(Exception e)
         {
